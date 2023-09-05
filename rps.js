@@ -1,6 +1,6 @@
 const rps = ["Rock", "Paper", "Scissors"]
 let score = 0
-let count = 5
+let pc = 0
 
 function getComputerChoice() {
     let index = Math.floor(Math.random() * 3)
@@ -27,24 +27,39 @@ function resultMessage(player, computer) {
 
     switch (diff) {
         case 0:
-            count--
             return "Draw"
         case 1:
             score++
             return "You win! " + rps[player] + " beats " + rps[computer]
         case 2:
+            pc++
             return "You lose! " + rps[computer] + " beats " + rps[player]
     }
 }
 
 function game() {
     score = 0
-    count = 5
-    for (let i = 0; i < 5; i++) {
-        let p = prompt()
-        console.log(playRound(p))
+    pc = 0
+    while (score < 5 && pc < 5) {
+        playRound(prompt())
+        console.log(score, pc)
     }
-    console.log("Final score: " + score + " - " + (count - score))
+    console.log("Final score: " + score + " - " + pc)
 }
 
-game()
+function clickEvent() {
+    const selection = this.textContent
+    const msg = playRound(selection)
+    const res = document.querySelector(".result")
+    res.textContent = msg + ".\nScore: " + score + " - " + pc
+    if (pc == 5 || score == 5) {
+        res.textContent += "\n Game over."
+        pc = 0
+        score = 0
+    }
+}
+
+// game()
+
+const buttons = document.querySelectorAll("button")
+buttons.forEach((button) => button.addEventListener('click', clickEvent))
